@@ -3,7 +3,7 @@ import * as Joi from "joi";
 export const serverSchema = Joi.object({
   PORT: Joi.number().required(),
 
-  // Accept either DATABASE_URL or all individual DB variables
+  // Allow either DATABASE_URL or individual fields
   DATABASE_URL: Joi.string().uri().optional(),
 
   POSTGRES_USER: Joi.alternatives().conditional('DATABASE_URL', {
