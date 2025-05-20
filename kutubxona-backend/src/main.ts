@@ -37,9 +37,10 @@ async function bootstrap() {
   
   //acsess
   app.enableCors({
-    origin: "http://localhost:5173",
+    origin: ["https://manbalar-xazinasi-jrty.vercel.app","http://localhost:5173"],
     methods: "GET,POST,PATCH,DELETE",
-    allowedHeaders: "Content-Type,Authorization"
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true,
   });
   await app.listen(configration.PORT);
 }

@@ -8,6 +8,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'node:path';
 import {fileFilter} from "../../lib/filterUploads"
 const uploadBasePath = join(__dirname, '../../../uploads')
+const API = process.env.REACT_APP_API_URL
 
 @Controller('kitoblar')
 export class KitoblarController {
@@ -61,7 +62,7 @@ export class KitoblarController {
     file.mimetype === 'image/webp' ? 'webp' :
     null;
 
-    return { url: `http://localhost:3000/uploads/${folder}/${file.filename}` };
+    return { url: `${API}/uploads/${folder}/${file.filename}` };
   }
 
   @Post()

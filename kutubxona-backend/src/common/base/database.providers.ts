@@ -1,5 +1,5 @@
-import { SequelizeModule } from "@nestjs/sequelize";
-import { configration } from "../config/env";
+import { SequelizeModule } from '@nestjs/sequelize';
+import { configration } from '../config/env';
 
 function parseDatabaseUrl(databaseUrl: string) {
   try {
@@ -14,13 +14,14 @@ function parseDatabaseUrl(databaseUrl: string) {
       dialect: 'postgres' as const,
       synchronize: true,
       autoLoadModels: true,
-      dialectOptions: url.search ? { ssl: { require: true, rejectUnauthorized: false } } : {},
+      dialectOptions: url.search
+        ? { ssl: { require: true, rejectUnauthorized: false } }
+        : {},
     };
   } catch (e) {
     throw new Error('Invalid DATABASE_URL format: ' + e.message);
   }
-};
-
+}
 
 const isProduction = !!process.env.DATABASE_URL;
 
