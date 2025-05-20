@@ -6,10 +6,10 @@ class ValidateError extends HttpException {
         super("validatsiyadan otmadi serverda muommo!", HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
-export async function validate(){
-    const {error} = await serverSchema.validate(configration)
-
+export async function validate() {
+    const { error } = await serverSchema.validate(configration);
     if (error) {
-        throw new ValidateError()
+        console.error("ENV VALIDATION ERROR:", error.details, configration); 
+        throw new ValidateError();
     }
 }
