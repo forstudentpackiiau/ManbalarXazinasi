@@ -8,12 +8,11 @@ import { KitoblarRepository } from './kitoblar.repository';
 import { ID } from 'src/common/types/type';
 import { InventarRaqam, KitoblarMavjudligi } from './exception/kitoblar.exception';
 
-
 @Injectable()
 export class KitoblarService implements IKitoblarService{
   constructor(
-    @Inject('KitoblarRepository')
-    private readonly kitoblarRepository: KitoblarRepository
+    @Inject('IKitoblarRepository')
+    private readonly kitoblarRepository:KitoblarRepository
   ){}
 
 
