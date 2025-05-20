@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Inject, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ValidationPipe,
+  Inject,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { KitoblarService } from './kitoblar.service';
 import { CreateKitoblarDto } from './dto/create-kitoblar.dto';
 import { UpdateKitoblarDto } from './dto/update-kitoblar.dto';
@@ -6,16 +18,16 @@ import { ID } from 'src/common/types/type';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'node:path';
-import {fileFilter} from "../../lib/filterUploads"
-const uploadBasePath = join(__dirname, '../../../uploads')
-const API = process.env.REACT_APP_API_URL
+import { fileFilter } from '../../lib/filterUploads';
+const uploadBasePath = join(__dirname, '../../../uploads');
+const API = process.env.VITE_API_URL;
 
 @Controller('kitoblar')
 export class KitoblarController {
   constructor(
-    @Inject("IKitoblarService")
-    private readonly kitoblarService: KitoblarService
-  ){}
+    @Inject('IKitoblarService')
+    private readonly kitoblarService: KitoblarService,
+  ) {}
 
   @Post('/upload')
   @UseInterceptors(
@@ -23,7 +35,7 @@ export class KitoblarController {
       storage: diskStorage({
         destination: (req, file, callback) => {
           console.log(file);
-          
+
           let folder = 'other';
           if (file.mimetype === 'image/png') {
             folder = 'png';
@@ -36,31 +48,37 @@ export class KitoblarController {
           } else if (file.mimetype === 'image/webp') {
             folder = 'webp';
           } else {
-            return new Error('Fayl turi noto‘g‘ri!')
+            return new Error('Fayl turi noto‘g‘ri!');
           }
-          
+
           callback(null, join(uploadBasePath, folder));
         },
         filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           callback(null, `${uniqueSuffix}${ext}`);
         },
       }),
-      fileFilter
-    })
+      fileFilter,
+    }),
   )
   uploadFile(@UploadedFile() file?: Express.Multer.File) {
     if (!file) {
       return { message: 'Fayl yuklanmadi!' };
     }
     const folder =
-    file.mimetype === 'image/png' ? 'png' :
-    file.mimetype === 'image/jpeg' ? 'jpeg' :
-    file.mimetype === 'application/pdf' ? 'pdf' :
-    file.mimetype === 'application/jpe' ? 'jpe' :
-    file.mimetype === 'image/webp' ? 'webp' :
-    null;
+      file.mimetype === 'image/png'
+        ? 'png'
+        : file.mimetype === 'image/jpeg'
+          ? 'jpeg'
+          : file.mimetype === 'application/pdf'
+            ? 'pdf'
+            : file.mimetype === 'application/jpe'
+              ? 'jpe'
+              : file.mimetype === 'image/webp'
+                ? 'webp'
+                : null;
 
     return { url: `${API}/uploads/${folder}/${file.filename}` };
   }
