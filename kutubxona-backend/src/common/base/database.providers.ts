@@ -2,20 +2,25 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { configration } from "../config/env";
 
 function parseDatabaseUrl(databaseUrl: string) {
-  // Example: postgres://user:pass@host:5432/dbname
-  const match = databaseUrl.match(
-    /^postgres:\/\/(.*?):(.*?)@(.*?):(\d+)\/(.*?)$/
-  );
-  if (!match) throw new Error("Invalid DATABASE_URL format");
+  try {
+    const url = new URL(databaseUrl);
 
-  return {
-    username: match[1],
-    password: match[2],
-    host: match[3],
-    port: parseInt(match[4], 10),
-    database: match[5],
-  };
+    return {
+      username: url.username,
+      password: url.password,
+      host: url.hostname,
+      port: parseInt(url.port, 10),
+      database: url.pathname.replace(/^\//, ''),
+      dialect: 'postgres' as const,
+      synchronize: true,
+      autoLoadModels: true,
+      dialectOptions: url.search ? { ssl: { require: true, rejectUnauthorized: false } } : {},
+    };
+  } catch (e) {
+    throw new Error('Invalid DATABASE_URL format: ' + e.message);
+  }
 }
+
 
 const isProduction = !!process.env.DATABASE_URL;
 
