@@ -8,7 +8,7 @@ export default function AddCategory() {
   const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const API = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   const handleAddCategory = async () => {
@@ -21,7 +21,7 @@ export default function AddCategory() {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:3000/kategoriya", { nomi: categoryName });
+      await axios.post(`${API}/kategoriya`, { nomi: categoryName });
       toast.success("Kategoriya muvaffaqiyatli qo'shildi!");
       setTimeout(() => navigate("/category-books"), 1000); // wait 1s before navigation
     } catch (err) {

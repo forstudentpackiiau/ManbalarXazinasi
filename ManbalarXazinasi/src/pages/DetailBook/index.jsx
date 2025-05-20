@@ -8,12 +8,13 @@ export default function DetailBook() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const API = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     async function fetchBook() {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/kitoblar/${id}`);
+        const res = await axios.get(`${API}/kitoblar/${id}`);
         setBook(res.data.data);
       } catch (err) {
         setError("Kitob topilmadi yoki tarmoq xatolik yuz berdi");

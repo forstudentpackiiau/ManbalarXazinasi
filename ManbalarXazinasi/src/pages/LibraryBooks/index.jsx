@@ -13,6 +13,7 @@ const LibraryBooks = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const API = process.env.REACT_APP_API_URL;
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -89,7 +90,7 @@ const LibraryBooks = () => {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:3000/kitoblar");
+      const res = await axios.get(`${API}/kitoblar`);
       const allBooks = res.data.data || res.data;
       setBooks(allBooks);
     } catch (error) {
@@ -101,7 +102,7 @@ const LibraryBooks = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/kitoblar/${id}`);
+      await axios.delete(`${API}/kitoblar/${id}`);
       toast.success("Kitob o'chirildi");
       fetchBooks();
     } catch (error) {

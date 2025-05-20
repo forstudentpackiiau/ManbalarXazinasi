@@ -9,11 +9,12 @@ export default function Login({ onLogin }) {
   const [modal, contextHolder] = Modal.useModal();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API = process.env.REACT_APP_API_URL;
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:3000/login", {
+      const response = await axios.post(`${API}/login`, {
         login,
         parol,
       });

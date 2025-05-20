@@ -10,10 +10,11 @@ export default function CategoryBooks() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const API = proccess.env.REACT_APP_API_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/kategoriya")
+      .get(`${API}/kategoriya`)
       .then((res) => {
         setCategories(res.data.data);
         setLoading(false);
@@ -34,7 +35,7 @@ export default function CategoryBooks() {
       cancelText: "Bekor qilish",
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/kategoriya/${id}`);
+          await axios.delete(`${API}/kategoriya/${id}`);
           setCategories(categories.filter((c) => c.id !== id));
           message.success("Kategoriya o‘chirildi!");
         } catch (err) {

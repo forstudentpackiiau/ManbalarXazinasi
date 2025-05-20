@@ -46,12 +46,13 @@ export default function EditBook() {
   const [fileUploading, setFileUploading] = useState(false);
   const [fileProgress, setFileProgress] = useState(0);
   const [fileUrl, setFileUrl] = useState(""); // Stores the link (old or new)
+  const API = process.env.REACT_APP_API_URL;
 
   // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await axios.get("http://localhost:3000/kategoriya");
+        const res = await axios.get(`${API}/kategoriya`);
         setCategories(res.data.data || []);
       } catch (err) {
         message.error("Kategoriya olishda xatolik");
@@ -69,7 +70,7 @@ export default function EditBook() {
     const fetchBook = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:3000/kitoblar/${bookId}`);
+        const res = await axios.get(`${API}/kitoblar/${bookId}`);
         if (res.data.data) {
           form.setFieldsValue(res.data.data);
           setImgUrl(res.data.data.rasm || "");
@@ -98,7 +99,7 @@ export default function EditBook() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/kitoblar/upload",
+       `${API}/kitoblar/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -139,7 +140,7 @@ export default function EditBook() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/kitoblar/upload",
+        `${API}/kitoblar/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -180,7 +181,7 @@ export default function EditBook() {
     };
 
     try {
-      await axios.patch(`http://localhost:3000/kitoblar/${bookId}`, payload);
+      await axios.patch(`${API}/kitoblar/${bookId}`, payload);
       message.success("Kitob muvaffaqiyatli yangilandi!");
       navigate(`/books/${bookId}`);
     } catch (err) {

@@ -6,13 +6,13 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function EditCategory() {
   const { id } = useParams();
-  
+
   const [oldCategoryName, setOldCategoryName] = useState("");
   const [newCategoryName, setNewCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
-
+  const API = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function EditCategory() {
       setFetching(true);
       setError(null);
       try {
-        const res = await axios.get(`http://localhost:3000/kategoriya/${id}`);
+        const res = await axios.get(`${API}/kategoriya/${id}`);
         setOldCategoryName(res.data.data.nomi);
       } catch (err) {
         setError("Kategoriya ma'lumotlarini olishda xatolik yuz berdi");
@@ -42,7 +42,9 @@ export default function EditCategory() {
     setLoading(true);
 
     try {
-      await axios.patch(`http://localhost:3000/kategoriya/${id}`, { nomi: newCategoryName });
+      await axios.patch(`${API}/kategoriya/${id}`, {
+        nomi: newCategoryName,
+      });
       toast.success("Kategoriya muvaffaqiyatli yangilandi!");
       setTimeout(() => navigate("/category-books"), 1000);
     } catch (err) {
@@ -59,7 +61,7 @@ export default function EditCategory() {
       <Toaster position="top-center" />
 
       <div className="text-sm text-muted-foreground mb-2">
-        <Breadcrumb categoryName={oldCategoryName}/>
+        <Breadcrumb categoryName={oldCategoryName} />
       </div>
       <h1 className="text-2xl font-semibold mb-6">Kategoriya tahrirlash</h1>
 

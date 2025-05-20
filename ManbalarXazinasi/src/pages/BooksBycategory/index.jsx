@@ -20,6 +20,7 @@ const BooksByCategory = () => {
 
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const dropdownRef = useRef(null);
+  const API = process.env.REACT_APP_API_URL;
 
   const PAGE_SIZE = 5;
   const permissions = {
@@ -31,7 +32,7 @@ const BooksByCategory = () => {
   useEffect(() => {
     async function fetchCategoryName() {
       try {
-        const res = await axios.get(`http://localhost:3000/kategoriya/${categoryId}`);
+        const res = await axios.get(`${API}/kategoriya/${categoryId}`);
         setCategoryName(res.data.data.nomi);
         setCurrentPage(1);
       } catch (err) {
@@ -48,7 +49,7 @@ const BooksByCategory = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get("http://localhost:3000/kitoblar", {
+        const res = await axios.get(`${API}/kitoblar`, {
           params: {
             _limit: 100,
             _page: 1,
