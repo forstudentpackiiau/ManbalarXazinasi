@@ -19,14 +19,13 @@ function parseDatabaseUrl(databaseUrl: string) {
   } catch (e) {
     throw new Error('Invalid DATABASE_URL format: ' + e.message);
   }
-}
+};
 
 
 const isProduction = !!process.env.DATABASE_URL;
 
 const dbConfig = isProduction
   ? {
-      dialect: 'postgres' as const,
       ...parseDatabaseUrl(process.env.DATABASE_URL!),
       synchronize: true,
       autoLoadModels: true,
