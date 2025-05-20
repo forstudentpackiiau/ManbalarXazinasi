@@ -12,7 +12,7 @@ export default function EditCategory() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -20,7 +20,7 @@ const BooksByCategory = () => {
 
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const dropdownRef = useRef(null);
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
 
   const PAGE_SIZE = 5;
   const permissions = {
@@ -72,7 +72,8 @@ const BooksByCategory = () => {
       (book) =>
         book.kategoriya === categoryName &&
         (searchTerm.trim() === "" ||
-          (book.nomi && book.nomi.toLowerCase().includes(searchTerm.trim().toLowerCase())))
+          (book.nomi &&
+            book.nomi.toLowerCase().includes(searchTerm.trim().toLowerCase())))
     );
     setTotalPages(Math.ceil(filtered.length / PAGE_SIZE) || 1);
     const start = (currentPage - 1) * PAGE_SIZE;
@@ -128,12 +129,12 @@ const BooksByCategory = () => {
   return (
     <div className="h-auto bg-gray-50 p-8 min-h-screen">
       <div className="mb-2 text-sm text-gray-500">
-        <Breadcrumb categoryName={categoryName}/>
+        <Breadcrumb categoryName={categoryName} />
       </div>
       <div className="max-w-full bg-white rounded-xl shadow p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="font-semibold text-lg text-gray-800">
-            Kategoriya: {categoryName} 
+            Kategoriya: {categoryName}
           </h2>
           <input
             type="text"
@@ -158,12 +159,24 @@ const BooksByCategory = () => {
             <table className="w-full text-sm whitespace-nowrap">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="p-3 font-semibold text-gray-600 text-center">Nomi</th>
-                  <th className="p-3 font-semibold text-gray-600 text-center">Soni</th>
-                  <th className="p-3 font-semibold text-gray-600 text-center">Stelyaj</th>
-                  <th className="p-3 font-semibold text-gray-600 text-center">Muallif</th>
-                  <th className="p-3 font-semibold text-gray-600 text-center">Tili</th>
-                  <th className="p-3 font-semibold text-gray-600 text-center">Harakatlar</th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Nomi
+                  </th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Soni
+                  </th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Stelyaj
+                  </th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Muallif
+                  </th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Tili
+                  </th>
+                  <th className="p-3 font-semibold text-gray-600 text-center">
+                    Harakatlar
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -180,12 +193,21 @@ const BooksByCategory = () => {
                       className="transition-all duration-100 hover:bg-gray-100 rounded-xl"
                       style={{ borderBottom: "1px solid #F1F3F5" }}
                     >
-                      
-                      <td className="p-3 text-center">{highlight(book.nomi, searchTerm)}</td>
-                      <td className="p-3 text-center">{highlight(book.soni, searchTerm)}</td>
-                      <td className="p-3 text-center">{highlight(book.stilaj, searchTerm)}</td>
-                      <td className="p-3 text-center">{highlight(book.muallif, searchTerm)}</td>
-                      <td className="p-3 text-center">{highlight(book.kitob_tili, searchTerm)}</td>
+                      <td className="p-3 text-center">
+                        {highlight(book.nomi, searchTerm)}
+                      </td>
+                      <td className="p-3 text-center">
+                        {highlight(book.soni, searchTerm)}
+                      </td>
+                      <td className="p-3 text-center">
+                        {highlight(book.stilaj, searchTerm)}
+                      </td>
+                      <td className="p-3 text-center">
+                        {highlight(book.muallif, searchTerm)}
+                      </td>
+                      <td className="p-3 text-center">
+                        {highlight(book.kitob_tili, searchTerm)}
+                      </td>
                       <td className="p-3 text-center">
                         <button
                           onClick={() =>
@@ -209,7 +231,10 @@ const BooksByCategory = () => {
                                   setDropdownIndex(null);
                                 }}
                               >
-                                <Eye size={16} className="inline mr-2 align-middle" />
+                                <Eye
+                                  size={16}
+                                  className="inline mr-2 align-middle"
+                                />
                                 Ko‘rish
                               </li>
                               {permissions.editAcsess && (
@@ -220,7 +245,10 @@ const BooksByCategory = () => {
                                     setDropdownIndex(null);
                                   }}
                                 >
-                                  <Pencil size={16} className="inline mr-2 align-middle" />
+                                  <Pencil
+                                    size={16}
+                                    className="inline mr-2 align-middle"
+                                  />
                                   Tahrirlash
                                 </li>
                               )}
@@ -232,7 +260,10 @@ const BooksByCategory = () => {
                                     setDropdownIndex(null);
                                   }}
                                 >
-                                  <Trash size={16} className="inline mr-2 align-middle" />
+                                  <Trash
+                                    size={16}
+                                    className="inline mr-2 align-middle"
+                                  />
                                   O‘chirish
                                 </li>
                               )}
@@ -244,7 +275,10 @@ const BooksByCategory = () => {
                                     setDropdownIndex(null);
                                   }}
                                 >
-                                  <Download size={16} className="inline mr-2 align-middle" />
+                                  <Download
+                                    size={16}
+                                    className="inline mr-2 align-middle"
+                                  />
                                   Yuklab olish
                                 </li>
                               )}

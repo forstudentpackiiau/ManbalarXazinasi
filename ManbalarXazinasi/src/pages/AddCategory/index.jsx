@@ -8,7 +8,7 @@ export default function AddCategory() {
   const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const handleAddCategory = async () => {
@@ -44,7 +44,9 @@ export default function AddCategory() {
       <h1 className="text-2xl font-semibold mb-6">Kategoriya qo'shish</h1>
 
       <div className="bg-white shadow-md rounded p-6">
-        <h2 className="text-lg font-semibold mb-4">Yangi kategoriyani qo'shish</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Yangi kategoriyani qo'shish
+        </h2>
 
         <div className="flex flex-col gap-4">
           <input

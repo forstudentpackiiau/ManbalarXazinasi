@@ -9,7 +9,7 @@ export default function Login({ onLogin }) {
   const [modal, contextHolder] = Modal.useModal();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
 
   const handleLogin = async () => {
     setLoading(true);
@@ -79,7 +79,9 @@ export default function Login({ onLogin }) {
           />
 
           <button
-            className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+            className={`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ${
+              loading ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleLogin}
             disabled={loading}
           >

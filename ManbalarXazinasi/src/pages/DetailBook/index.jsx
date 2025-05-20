@@ -8,7 +8,7 @@ export default function DetailBook() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     async function fetchBook() {
@@ -59,7 +59,8 @@ export default function DetailBook() {
           {/* Title + PDF link */}
           <div className="flex-1">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              {book.nomi} <span className="text-gray-400 font-normal">#{id}</span>
+              {book.nomi}{" "}
+              <span className="text-gray-400 font-normal">#{id}</span>
             </h2>
             {book.kitob_file ? (
               <a
@@ -81,7 +82,7 @@ export default function DetailBook() {
             <span className="font-semibold">Muallif:</span>{" "}
             {book.muallif || "-"}
           </p>
-          
+
           <p>
             <span className="font-semibold">Nashriyot:</span>{" "}
             {book.nashriyot || "-"}
@@ -103,26 +104,21 @@ export default function DetailBook() {
             {book.soni || "-"}
           </p>
           <p>
-            <span className="font-semibold">Stelyaj:</span>{" "}
-            {book.stilaj || "-"}
+            <span className="font-semibold">Stelyaj:</span> {book.stilaj || "-"}
           </p>
           <p>
             <span className="font-semibold">Tili:</span>{" "}
             {book.kitob_tili || "-"}
           </p>
           <p>
-            <span className="font-semibold">Shahar:</span>{" "}
-            {book.shahar || "-"}
+            <span className="font-semibold">Shahar:</span> {book.shahar || "-"}
           </p>
           <p>
-            <span className="font-semibold">Sohasi:</span>{" "}
-            {book.sohasi || "-"}
+            <span className="font-semibold">Sohasi:</span> {book.sohasi || "-"}
           </p>
           <p>
-            <span className="font-semibold">Izoh:</span>{" "}
-            {book.izoh || "-"}
+            <span className="font-semibold">Izoh:</span> {book.izoh || "-"}
           </p>
-          
         </div>
       </div>
     </div>

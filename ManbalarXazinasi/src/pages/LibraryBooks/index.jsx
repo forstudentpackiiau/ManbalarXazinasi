@@ -6,14 +6,14 @@ import Breadcrumb from "../../components/Breadcrumb";
 import toast, { Toaster } from "react-hot-toast";
 
 const LibraryBooks = () => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState([]); // Ensure books is always an array
   const [dropdownIndex, setDropdownIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const API = process.env.REACT_APP_API_URL;
+  const API = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -41,6 +41,37 @@ const LibraryBooks = () => {
       );
   }
 
+  // Fetch books
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API}/kitoblar`);
+      // Validate response to ensure it's an array
+      const allBooks = Array.isArray(res.data.data)
+        ? res.data.data
+        : Array.isArray(res.data)
+        ? res.data
+        : [];
+      setBooks(allBooks);
+    } catch (error) {
+      toast.error(`Kitoblarni olishda xatolik yuz berdi: ${error.message}`);
+      setBooks([]); // Fallback to empty array on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Delete book
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API}/kitoblar/${id}`);
+      toast.success("Kitob o'chirildi");
+      fetchBooks();
+    } catch (error) {
+      toast.error(`Kitobni o'chirishda xatolik yuz berdi: ${error.message}`);
+    }
+  };
+
   // Filter books before paginating
   const filteredBooks = books.filter((book) => {
     const term = searchTerm.trim().toLowerCase();
@@ -59,22 +90,22 @@ const LibraryBooks = () => {
     currentPage * PAGE_SIZE
   );
 
+  // Fetch books on mount
   useEffect(() => {
     fetchBooks();
-    // eslint-disable-next-line
   }, []);
 
-  // Always reset page to 1 if search term changes
+  // Reset page to 1 when search term changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
-  // Set total pages based on filteredBooks
+  // Update total pages based on filteredBooks
   useEffect(() => {
     setTotalPages(Math.ceil(filteredBooks.length / PAGE_SIZE) || 1);
   }, [filteredBooks]);
 
-  // Handle clicks outside the dropdown to close it
+  // Handle clicks outside the dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -87,29 +118,7 @@ const LibraryBooks = () => {
     };
   }, []);
 
-  const fetchBooks = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${API}/kitoblar`);
-      const allBooks = res.data.data || res.data;
-      setBooks(allBooks);
-    } catch (error) {
-      toast.error("Kitoblarni olishda xatolik yuz berdi");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API}/kitoblar/${id}`);
-      toast.success("Kitob o'chirildi");
-      fetchBooks();
-    } catch (error) {
-      toast.error("Kitobni o'chirishda xatolik yuz berdi");
-    }
-  };
-
+  // Pagination navigation
   const goToPage = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -134,9 +143,7 @@ const LibraryBooks = () => {
               placeholder="Qidiruv"
               className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 transition-all duration-150"
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-              }}
+              onChange={(e) => setSearchTerm(e.target.value)}
               style={{ minWidth: 180 }}
             />
             {permissions.createAcsess && (
@@ -207,12 +214,12 @@ const LibraryBooks = () => {
                       <td className="p-3 text-center">
                         {highlight(book.kitob_tili, searchTerm)}
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3 text-center relative">
                         <button
                           onClick={() =>
                             setDropdownIndex(dropdownIndex === idx ? null : idx)
                           }
-                          className="text-blue-500 relative m-auto flex items-center  px-2 py-1 rounded hover:bg-gray-100 "
+                          className="text-blue-500 m-auto flex items-center px-2 py-1 rounded hover:bg-gray-100"
                         >
                           <AlignJustify size={16} />
                           <span className="ml-1 text-center">Harakatlar</span>
@@ -220,7 +227,7 @@ const LibraryBooks = () => {
                         {dropdownIndex === idx && (
                           <div
                             ref={dropdownRef}
-                            className="absolute w-32  bg-white border border-gray-200 rounded-xl shadow-lg z-50"
+                            className="absolute w-32 bg-white border border-gray-200 rounded-xl shadow-lg z-50"
                           >
                             <ul>
                               <li
@@ -265,12 +272,11 @@ const LibraryBooks = () => {
                               )}
                               {book.kitob_file && (
                                 <li
-                                  className="px-4 py-2 hover:bg-gray-100 text-green-600 cursor-pointer rounded-b-xl flex items-center justify-start"
+                                  className="px-4 py-3 hover:bg-gray-100 text-green-600 cursor-pointer rounded-b-xl flex items-center justify-start"
                                   onClick={() => {
-                                    // Create an anchor element and trigger download
                                     const link = document.createElement("a");
                                     link.href = book.kitob_file;
-                                    link.download = ""; // Optionally set a default filename: e.g. "file.pdf"
+                                    link.download = book.nomi || "file.pdf";
                                     document.body.appendChild(link);
                                     link.click();
                                     document.body.removeChild(link);
@@ -312,7 +318,7 @@ const LibraryBooks = () => {
               <button
                 key={pageNum + 1}
                 onClick={() => goToPage(pageNum + 1)}
-                className={`px-3 py-1 rounded-lg border  transition-all duration-100 ${
+                className={`px-3 py-1 rounded-lg border transition-all duration-100 ${
                   currentPage === pageNum + 1
                     ? "text-[#F0F6FF] bg-[#2D68FF] font-semibold"
                     : "text-[#637381] hover:bg-[#F6F8FB] hover:text-[#212B36]"

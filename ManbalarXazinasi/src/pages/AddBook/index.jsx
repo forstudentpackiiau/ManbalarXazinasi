@@ -35,9 +35,8 @@ export default function AddBook() {
   const [fileProgress, setFileProgress] = useState(0);
   const [fileUrl, setFileUrl] = useState("");
   const navigate = useNavigate();
-  const API = process.env.REACT_APP_API_URL;
- // example
-
+  const API = import.meta.env.VITE_API_URL;
+  // example
 
   useEffect(() => {
     async function fetchCategories() {
@@ -60,16 +59,12 @@ export default function AddBook() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post(
-        `${API}/kitoblar/upload`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (e) => {
-            setImgProgress(Math.round((e.loaded * 100) / e.total));
-          },
-        }
-      );
+      const res = await axios.post(`${API}/kitoblar/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (e) => {
+          setImgProgress(Math.round((e.loaded * 100) / e.total));
+        },
+      });
 
       if (res.data?.url) {
         setImgUrl(res.data.url);
@@ -94,16 +89,12 @@ export default function AddBook() {
     formData.append("file", file);
 
     try {
-      const res = await axios.post(
-        `${API}/kitoblar/upload`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (e) => {
-            setFileProgress(Math.round((e.loaded * 100) / e.total));
-          },
-        }
-      );
+      const res = await axios.post(`${API}/kitoblar/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (e) => {
+          setFileProgress(Math.round((e.loaded * 100) / e.total));
+        },
+      });
 
       if (res.data?.url) {
         setFileUrl(res.data.url);
