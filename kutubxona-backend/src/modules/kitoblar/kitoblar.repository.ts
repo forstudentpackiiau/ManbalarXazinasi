@@ -1,3 +1,4 @@
+import { Injectable } from "@nestjs/common";
 import { IKitolarRepository } from "./interface/kitoblar.repository";
 import { Kitoblar } from "./entities/kitoblar.entity";
 import { CreateKitoblarDto } from "./dto/create-kitoblar.dto";
@@ -5,6 +6,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { ID } from "src/common/types/type";
 import { UpdateKitoblarDto } from "./dto/update-kitoblar.dto";
 
+@Injectable()
 export class KitoblarRepository implements IKitolarRepository {
     constructor(
         @InjectModel(Kitoblar)
