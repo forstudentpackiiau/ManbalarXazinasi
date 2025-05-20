@@ -1,39 +1,27 @@
 import * as Joi from "joi";
 
-export const serverSchema = Joi.object({
-  PORT: Joi.number().required(),
-
-  // Allow either DATABASE_URL or individual fields
-  DATABASE_URL: Joi.string().uri().optional(),
-
-  POSTGRES_USER: Joi.alternatives().conditional('DATABASE_URL', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.string().required()
-  }),
-  POSTGRES_DB: Joi.alternatives().conditional('DATABASE_URL', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.string().required()
-  }),
-  POSTGRES_HOST: Joi.alternatives().conditional('DATABASE_URL', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.string().required()
-  }),
-  POSTGRES_PASSWORD: Joi.alternatives().conditional('DATABASE_URL', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.string().required()
-  }),
-  POSTGRES_PORT: Joi.alternatives().conditional('DATABASE_URL', {
-    is: Joi.exist(),
-    then: Joi.optional(),
-    otherwise: Joi.number().required()
+export const serverSchema = Joi.alternatives().try(
+  // Option 1: DATABASE_URL is provided (Render)
+  Joi.object({
+    PORT: Joi.number().required(),
+    DATABASE_URL: Joi.string().uri().required(),
+    KUTUBXONACHI_LOGINI: Joi.string().required(),
+    KUTUBXONACHI_PAROLI: Joi.string().required(),
+    USTOZ_LOGINI: Joi.string().required(),
+    USTOZ_PAROLI: Joi.string().required(),
   }),
 
-  KUTUBXONACHI_LOGINI: Joi.string().required(),
-  KUTUBXONACHI_PAROLI: Joi.string().required(),
-  USTOZ_LOGINI: Joi.string().required(),
-  USTOZ_PAROLI: Joi.string().required(),
-});
+  // Option 2: Individual DB fields are provided (local dev)
+  Joi.object({
+    PORT: Joi.number().required(),
+    POSTGRES_USER: Joi.string().required(),
+    POSTGRES_DB: Joi.string().required(),
+    POSTGRES_HOST: Joi.string().required(),
+    POSTGRES_PASSWORD: Joi.string().required(),
+    POSTGRES_PORT: Joi.number().required(),
+    KUTUBXONACHI_LOGINI: Joi.string().required(),
+    KUTUBXONACHI_PAROLI: Joi.string().required(),
+    USTOZ_LOGINI: Joi.string().required(),
+    USTOZ_PAROLI: Joi.string().required(),
+  })
+);
