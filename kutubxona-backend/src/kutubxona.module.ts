@@ -7,10 +7,16 @@ import { join } from 'node:path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
-  
-  imports: [ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'uploads'), // Static fayllar uchun yo‘l
-    serveRoot: '/uploads', // URL orqali kirish yo‘li
-  }), DatabaseService, KitoblarModule, KategoriyaModule, LoginModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+    KitoblarModule,
+    KategoriyaModule,
+    LoginModule,
+  ],
+  providers: [DatabaseService], // ✅ Correct usage
 })
 export class KutubxonaBackendModule {}
+
