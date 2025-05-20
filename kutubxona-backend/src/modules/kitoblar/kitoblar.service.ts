@@ -12,8 +12,8 @@ import { InventarRaqam, KitoblarMavjudligi } from './exception/kitoblar.exceptio
 @Injectable()
 export class KitoblarService implements IKitoblarService{
   constructor(
-    @Inject('IKitoblarRepository')
-    private readonly kitoblarRepository:KitoblarRepository
+    @Inject('KitoblarRepository')
+    private readonly kitoblarRepository: KitoblarRepository
   ){}
 
 
