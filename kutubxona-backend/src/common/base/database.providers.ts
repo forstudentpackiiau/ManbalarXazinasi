@@ -1,3 +1,4 @@
+// common/base/database.providers.ts
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { configration } from '../config/env';

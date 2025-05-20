@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { KitoblarModule } from './modules/kitoblar/kitoblar.module';
-import { DatabaseModule } from './common/base/database.providers';
+import { DatabaseModule } from './common/base/database.providers'; // ✅ to'g'ri yo'l
 import { KategoriyaModule } from './modules/kategoriya/kategoriya.module';
 import { LoginModule } from './modules/login/login.module';
-import { join } from 'node:path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'node:path';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
-    DatabaseModule, // ✅ Bu yer to‘g‘ri!
+    DatabaseModule,
     KitoblarModule,
     KategoriyaModule,
     LoginModule,
